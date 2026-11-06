@@ -4,6 +4,7 @@
 import hashlib
 import json
 import subprocess
+import time
 import urllib.request
 from pathlib import Path, PurePosixPath
 
@@ -65,8 +66,10 @@ def main():
     root = Path(__file__).resolve().parent.parent
     try:
         request = urllib.request.Request(
-            API, headers={"Accept": "application/vnd.github+json",
-                          "User-Agent": "fashion-listing-skill-update-check"},
+            API + "&check=" + str(time.time_ns()),
+            headers={"Accept": "application/vnd.github+json",
+                     "Cache-Control": "no-cache",
+                     "User-Agent": "fashion-listing-skill-update-check"},
         )
         with urllib.request.urlopen(request, timeout=8) as response:
             tree = json.load(response)
